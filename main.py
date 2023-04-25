@@ -5,7 +5,8 @@ import papermill as pm
 import scrapbook as sb
 from tempfile import TemporaryDirectory
 import numpy as np
-import tensorflow.compat.v1 as tf
+import tensorflow._api.v2.compat.v1 as tf
+tf.disable_v2_behavior()
 tf.get_logger().setLevel('ERROR') # only show error messages
 
 from recommenders.utils.timer import Timer
@@ -13,7 +14,7 @@ from recommenders.utils.constants import SEED
 from recommenders.models.deeprec.deeprec_utils import (
     prepare_hparams
 )
-from recommenders.datasets.amazon_reviews import download_and_extract, data_preprocessing
+from amazon_reviews import download_and_extract, data_preprocessing
 from recommenders.datasets.download_utils import maybe_download
 
 
@@ -32,12 +33,12 @@ from recommenders.models.deeprec.io.sequential_iterator import SequentialIterato
 print("System version: {}".format(sys.version))
 print("Tensorflow version: {}".format(tf.__version__))
 ##  ATTENTION: change to the corresponding config file, e.g., caser.yaml for CaserModel, sum.yaml for SUMModel
-yaml_file = '../../recommenders/models/deeprec/config/sli_rec.yaml'  
+yaml_file = 'sli_rec.yaml'
 EPOCHS = 10
 BATCH_SIZE = 400
 RANDOM_SEED = SEED  # Set None for non-deterministic result
 
-data_path = os.path.join("..", "..", "tests", "resources", "deeprec", "slirec")
+data_path = os.path.join( "tests", "slirec")
 # for test
 train_file = os.path.join(data_path, r'train_data')
 valid_file = os.path.join(data_path, r'valid_data')
@@ -94,7 +95,7 @@ print(model.run_eval(test_file, num_ngs=test_num_ngs))
 with Timer() as train_time:
     model = model.fit(train_file, valid_file, valid_num_ngs=valid_num_ngs) 
 
-# valid_num_ngs is the number of negative lines after each positive line in your valid_file 
+# valid_num_ngs     is the number of negative lines after each positive line in your valid_file
 # we will evaluate the performance of model on valid_file every epoch
 print('Time cost for training is {0:.2f} mins'.format(train_time.interval/60.0))
 res_syn = model.run_eval(test_file, num_ngs=test_num_ngs)
