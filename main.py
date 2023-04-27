@@ -18,7 +18,7 @@ from amazon_reviews import download_and_extract, data_preprocessing
 from recommenders.datasets.download_utils import maybe_download
 
 
-from recommenders.models.deeprec.models.sequential.sli_rec import SLI_RECModel as SeqModel
+from sli_rec import SLI_RECModel as SeqModel
 ####  to use the other model, use one of the following lines:
 # from recommenders.models.deeprec.models.sequential.asvd import A2SVDModel as SeqModel
 # from recommenders.models.deeprec.models.sequential.caser import CaserModel as SeqModel
@@ -89,7 +89,7 @@ model = SeqModel(hparams, input_creator, seed=RANDOM_SEED)
 
 ## sometimes we don't want to train a model from scratch
 ## then we can load a pre-trained model like this: 
-#model.load_model(r'your_model_path')
+#model.load_model(r'tests\slirec\model/best_model')
 # test_num_ngs is the number of negative lines after each positive line in your test_file
 print(model.run_eval(test_file, num_ngs=test_num_ngs)) 
 with Timer() as train_time:
